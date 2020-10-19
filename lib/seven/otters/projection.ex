@@ -102,12 +102,12 @@ defmodule Seven.Otters.Projection do
         Seven.Log.event_received(event, registered_name())
         new_internal_state = handle_event(event, internal_state)
 
-        snapshot =
-          snapshot
-          |> Snapshot.add_events([event])
-          |> Snapshot.snap_if_needed(new_internal_state)
+        #snapshot =
+        #  snapshot
+        #  |> Snapshot.add_events([event])
+        #  |> Snapshot.snap_if_needed(new_internal_state)
 
-        {:noreply, %{state | internal_state: new_internal_state, snapshot: snapshot}}
+        {:noreply, %{state | internal_state: new_internal_state, snapshot: nil}} #snapshot}}
       end
 
       def handle_info(_, state), do: {:noreply, state}
