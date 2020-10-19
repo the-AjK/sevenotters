@@ -90,7 +90,7 @@ defmodule Seven.Otters.Aggregate do
       def handle_continue(:rehydrate, correlation_id) do
         Seven.Log.debug("Init (#{inspect(self())}): #{inspect(correlation_id)}")
 
-        {state, snapshot} = rehydrate(correlation_id, Snapshot.get_snap(correlation_id))
+        {state, snapshot} = rehydrate(correlation_id, nil) #Snapshot.get_snap(correlation_id))
 
         {:noreply,
          %{
@@ -182,12 +182,12 @@ defmodule Seven.Otters.Aggregate do
             new_internal_state = apply_events(events, state.internal_state)
             Events.trigger(events)
 
-            snapshot =
-              state.snapshot
-              |> Snapshot.add_events(events)
-              |> Snapshot.snap_if_needed(new_internal_state)
+            #snapshot =
+            #  state.snapshot
+            #  |> Snapshot.add_events(events)
+            #  |> Snapshot.snap_if_needed(new_internal_state)
 
-            {:reply, :managed, %{state | internal_state: new_internal_state, snapshot: snapshot}}
+            {:reply, :managed, %{state | internal_state: new_internal_state, snapshot: nil}} #snapshot}}
 
           err ->
             err = after_command(err)
